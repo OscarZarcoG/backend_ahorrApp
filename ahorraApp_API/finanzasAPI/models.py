@@ -4,17 +4,23 @@ from django.core.validators import MinValueValidator
 from django.db import transaction
 
 class Cash(models.Model):
+    CURRENCY_CHOICES = [
+        ('USD', 'Dólar estadounidense'),
+        ('EUR', 'Euro'),
+        ('MXN', 'Peso mexicano'),
+    ]
+
     name = models.CharField(max_length=50)
-    symbol = {
-        'USD': '$',
-        'EUR': '€',
-        'MXN': '$'
-    }
+    currency = models.CharField(
+        max_length=3,
+        choices=CURRENCY_CHOICES,
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name
+
 
 class TypeTransaction(models.Model):
     name = models.CharField(max_length=50)
@@ -50,12 +56,13 @@ class Account(models.Model):
         self.balance += amount
         self.save()
 
+
 class Transaction(models.Model):
-    concept = models.CharField(max_length=255)
+    concept = models.CharField(max_length=255, blank=True, null=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0.01)])
     fk_type_transaction = models.ForeignKey(TypeTransaction, on_delete=models.CASCADE)
     fk_account = models.ForeignKey(Account, on_delete=models.CASCADE)
-    fk_category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    fk_category = models.ForeignKey(Category, on_delete=models.CASCADE, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -86,7 +93,6 @@ class Transaction(models.Model):
             self.fk_account.save()
             super().save(*args, **kwargs)
 
-            # Registrar el cambio en el historial de balance
             BalanceHistory.objects.create(
                 account=self.fk_account,
                 transaction=self,

@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-g%=xnju0ik-)h)2cf-5bxaf##8(l3a9w3-a!1pv$67+3*nzp(c
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '192.168.137.1', '192.168.1.66'] #'127.0.0.1',
+ALLOWED_HOSTS = ['localhost', '192.168.137.1', '192.168.1.66', '192.168.1.74', '192.168.148.113' ] #'127.0.0.1',
 #ALLOWED_HOSTS = ['*']
 
 # Application definition
@@ -44,6 +44,7 @@ INSTALLED_APPS = [
 
     'userAPI',
     'finanzasAPI',
+
 ]
 
 MIDDLEWARE = [
