@@ -11,14 +11,19 @@ class SignUpView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
+
 class LoginView(APIView):
     def post(self, request):
         username = request.data.get('username')
         password = request.data.get('password')
         user = authenticate(username=username, password=password)
+
         if user:
             token, _ = Token.objects.get_or_create(user=user)
-            return Response({'token': token.key})
+            return Response({
+                'token': token.key,
+                'is_superuser': user.is_superuser
+            })
         return Response({'error': 'Credenciales inválidas'}, status=status.HTTP_400_BAD_REQUEST)
 
 class LogoutView(APIView):

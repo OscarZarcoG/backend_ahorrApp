@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-g%=xnju0ik-)h)2cf-5bxaf##8(l3a9w3-a!1pv$67+3*nzp(c
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '192.168.137.1', '192.168.1.66', '192.168.1.74', '192.168.148.113' ] #'127.0.0.1',
+ALLOWED_HOSTS = ['localhost', '192.168.1.94', '192.168.1.74'] #'127.0.0.1',
 #ALLOWED_HOSTS = ['*']
 
 # Application definition
@@ -44,7 +44,7 @@ INSTALLED_APPS = [
 
     'userAPI',
     'finanzasAPI',
-
+    'ml_suggestions',
 ]
 
 MIDDLEWARE = [
@@ -135,13 +135,26 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:19006",  # Si corres el frontend en localhost
-    "http://192.168.1.82:19006",  # Dirección IP local de tu frontend
-    "exp://192.168.1.82:8081",  # URL de Expo (React Native)
+    # REACT NEXT JS
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://192.168.1.74:3000", #Ethernet
+    "http://192.168.1.94:3000", #Wifi
+
+
+    # REACT NATIVE
+    "http://localhost:19006",
+
+    "http://192.168.1.94:19006", # Wifi
+    "exp://192.168.1.94:8081",
+
+    "http://192.168.1.74:19006", # Ethernet
+    "exp://192.168.1.74:8081",
 ]
 
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOW_METHODS = [
     "DELETE",
@@ -151,3 +164,28 @@ CORS_ALLOW_METHODS = [
     "POST",
     "PUT",
 ]
+
+CORS_ALLOW_HEADERS = [
+    "accept",
+    "accept-encoding",
+    "authorization",
+    "content-type",
+    "dnt",
+    "origin",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
+]
+
+# Configuración para sugerencias
+SUGGESTION_RULES = {
+    'HIGH_SPENDING_PERCENTAGE': 80,  # Porcentaje para considerar gasto alto
+    'MEDIUM_SPENDING_PERCENTAGE': 50, # Porcentaje para considerar gasto medio
+    'FREQUENT_TRANSACTION_COUNT': 20,  # Número de transacciones para considerar frecuente
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+}
