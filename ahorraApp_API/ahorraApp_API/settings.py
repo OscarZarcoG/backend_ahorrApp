@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-g%=xnju0ik-)h)2cf-5bxaf##8(l3a9w3-a!1pv$67+3*nzp(c
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '192.168.1.94', '192.168.1.74'] #'127.0.0.1',
+ALLOWED_HOSTS = ['localhost', '192.168.1.94', '192.168.1.74', '192.168.155.113'] #'127.0.0.1',
 #ALLOWED_HOSTS = ['*']
 
 # Application definition
@@ -119,10 +119,10 @@ AUTH_PASSWORD_VALIDATORS = [
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'America/Mexico_City'
+USE_TZ = True
 
 USE_I18N = True
 
-USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
@@ -142,6 +142,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
     "http://192.168.1.74:3000", #Ethernet
     "http://192.168.1.94:3000", #Wifi
+    "http://192.168.155.113:3000",
 
 
     # REACT NATIVE
