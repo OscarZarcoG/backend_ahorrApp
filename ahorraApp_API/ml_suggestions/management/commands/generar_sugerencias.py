@@ -23,3 +23,5 @@ class Command(BaseCommand):
                         f'✗ Error al generar sugerencias para la cuenta {account.number_account}: {str(e)}'
                     )
                 )
+
+# COMANDO  python manage.py generar_sugerencias

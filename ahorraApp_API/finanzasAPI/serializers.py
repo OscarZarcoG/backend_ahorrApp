@@ -4,7 +4,7 @@ from rest_framework import serializers
 class CashSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cash
-        fields = ['name', 'symbol', 'created_at', 'updated_at']
+        fields = ['name', 'symbol', 'price', 'created_at', 'updated_at']
 
 class TypeTransactionSerializer(serializers.ModelSerializer):
     class Meta:

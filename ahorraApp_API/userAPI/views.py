@@ -47,9 +47,25 @@ class SignUpView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         user = serializer.save()
-        # Actualiza last_login al momento del registro
         user.last_login = timezone.now()
         user.save(update_fields=['last_login'])
+
+        # Crear y devolver token
+        token, _ = Token.objects.get_or_create(user=user)
+        return token  # Esto no funcionará directamente, necesitas override create
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        token = self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+
+        return Response({
+            'token': token.key,
+            'user_id': token.user.id,
+            'is_superuser': token.user.is_superuser,
+            'last_login': token.user.last_login.isoformat() if token.user.last_login else None
+        }, status=status.HTTP_201_CREATED, headers=headers)
 
 
 class LoginView(APIView):
