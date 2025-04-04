@@ -142,7 +142,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
     "http://192.168.1.74:3000", #Ethernet
     "http://192.168.1.94:3000", #Wifi
-    "http://192.168.155.113:3000",
+    "http://192.168.155.113:3000", #Datos móviles
 
 
     # REACT NATIVE
