@@ -1,20 +1,24 @@
 # userAPI/views.py
-from rest_framework import generics, permissions, status
-from rest_framework.response import Response
-from rest_framework.authtoken.models import Token
+import random
+import uuid
+
+
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
-from rest_framework.views import APIView
-from .serializers import UserSerializer
 from django.utils import timezone
+from rest_framework import generics, permissions, status
+from rest_framework.authtoken.models import Token
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
+from .serializers import UserSerializer
+from finanzasAPI.models import Cash, Account
 
 class GetUserInfo(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, pk=None):
         if pk:
-            # Si se solicita un usuario específico por ID
             if not request.user.is_superuser and str(request.user.id) != pk:
                 return Response(
                     {'error': 'No tienes permisos para ver otros usuarios'},
@@ -28,7 +32,6 @@ class GetUserInfo(APIView):
                     status=status.HTTP_404_NOT_FOUND
                 )
         else:
-            # Si no se especifica ID, devuelve el usuario actual
             user = request.user
 
         return Response({
@@ -50,9 +53,28 @@ class SignUpView(generics.CreateAPIView):
         user.last_login = timezone.now()
         user.save(update_fields=['last_login'])
 
-        # Crear y devolver token
+        default_cash, created = Cash.objects.get_or_create(
+            name="Efectivo",
+            defaults={"currency": "MXN"}
+        )
+
+        account_number = f"{uuid.uuid4().hex[:12].upper()}"
+
+        while True:
+            account_number = ''.join([str(random.randint(0, 9)) for _ in range(18)])
+
+            if not Account.objects.filter(number_account=account_number).exists():
+                break
+
+        Account.objects.create(
+            number_account=account_number,
+            balance=0.00,
+            fk_cash=default_cash,
+            fk_user=user
+        )
+
         token, _ = Token.objects.get_or_create(user=user)
-        return token  # Esto no funcionará directamente, necesitas override create
+        return token
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -75,8 +97,6 @@ class LoginView(APIView):
         user = authenticate(username=username, password=password)
 
         if user:
-            # No actualizamos last_login aquí para evitar actualizaciones duplicadas
-            # La actualización se hará mediante el endpoint UpdateLastLoginView
             token, _ = Token.objects.get_or_create(user=user)
             return Response({
                 'token': token.key,
@@ -91,7 +111,6 @@ class UpdateLastLoginView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def put(self, request, pk=None):
-        # Verificar que el usuario solo puede actualizar su propio last_login
         if pk and str(request.user.id) != pk and not request.user.is_superuser:
             return Response(
                 {'error': 'No tienes permisos para actualizar otro usuario'},

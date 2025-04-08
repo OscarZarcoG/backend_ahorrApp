@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-g%=xnju0ik-)h)2cf-5bxaf##8(l3a9w3-a!1pv$67+3*nzp(c
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '192.168.1.94', '192.168.1.74', '192.168.155.113'] #'127.0.0.1',
+ALLOWED_HOSTS = ['localhost', '192.168.1.94', '192.168.1.74', '192.168.155.113', '192.168.1.5'] #'127.0.0.1',
 #ALLOWED_HOSTS = ['*']
 
 # Application definition
@@ -143,7 +143,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://192.168.1.74:3000", #Ethernet
     "http://192.168.1.94:3000", #Wifi
     "http://192.168.155.113:3000", #Datos móviles
-
+    "http://192.168.1.5:3000", #Casa
 
     # REACT NATIVE
     "http://localhost:19006",
@@ -190,3 +190,6 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ],
 }
+
+ADMIN_SITE_HEADER = "AhorraApp Admin"  # Personaliza el título
+ADMIN_SITE_URL = "http://192.168.1.74:3000/dashboard/"

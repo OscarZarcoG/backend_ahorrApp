@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator
 from django.db import transaction
+from django.utils import timezone
+
 
 class Cash(models.Model):
     CURRENCY_CHOICES = [
@@ -58,20 +60,28 @@ class Account(models.Model):
 
 
 class Transaction(models.Model):
-    concept = models.CharField(max_length=255, blank=True, null=True)
+    concept = models.CharField(max_length=255, default="Ingreso")
     amount = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0.01)])
     fk_type_transaction = models.ForeignKey(TypeTransaction, on_delete=models.CASCADE)
     fk_account = models.ForeignKey(Account, on_delete=models.CASCADE)
     fk_category = models.ForeignKey(Category, on_delete=models.CASCADE, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    hora_dia = models.IntegerField(default=0, help_text="Hora del día (0-23)")
+    dia_semana = models.IntegerField(default=0, help_text="Día de semana (0-6 donde 0 es lunes)")
+    mes = models.IntegerField(default=1, help_text="Mes (1-12)")
 
     def __str__(self):
         return f"{self.concept} - {self.amount}"
 
     def save(self, *args, **kwargs):
+        if not self.pk:
+            now = timezone.now()
+            self.hora_dia = now.hour
+            self.dia_semana = now.weekday()  # 0=lunes, 6=domingo
+            self.mes = now.month
         with transaction.atomic():
-            if self.pk:  # Si la transacción ya existía, revertir el balance anterior
+            if self.pk:
                 old_transaction = Transaction.objects.get(pk=self.pk)
                 if old_transaction.fk_type_transaction.is_income:
                     old_transaction.fk_account.balance -= old_transaction.amount
@@ -79,10 +89,8 @@ class Transaction(models.Model):
                     old_transaction.fk_account.balance += old_transaction.amount
                 old_transaction.fk_account.save()
 
-            # Guardar el balance anterior antes de modificarlo
             previous_balance = self.fk_account.balance
 
-            # Aplicar la nueva transacción
             if self.fk_type_transaction.is_income:
                 self.fk_account.balance += self.amount
             else:
