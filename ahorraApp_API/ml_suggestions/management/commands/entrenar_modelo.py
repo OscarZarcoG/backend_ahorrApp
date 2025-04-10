@@ -22,7 +22,6 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         self.stdout.write(self.style.SUCCESS('\n[1/6] Cargando datos...'))
         try:
-            # Ruta relativa confiable
             csv_path = r"C:\Users\oscar\OneDrive\Documents\Universidad\octavo\proyecto\ejecutables\transacciones_compatibles.csv"
             df = pd.read_csv(csv_path, parse_dates=['created_at'])
 

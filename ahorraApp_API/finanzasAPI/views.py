@@ -16,6 +16,11 @@ class TypeTransactionViewSet(viewsets.ModelViewSet):
     queryset = TypeTransaction.objects.all()
     serializer_class = TypeTransactionSerializer
 
+def list(self, request, *args, **kwargs):
+    queryset = self.filter_queryset(self.get_queryset())
+    serializer = self.get_serializer(queryset, many=True)
+    print("Sending type transactions:", serializer.data)
+    return Response(serializer.data)
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()

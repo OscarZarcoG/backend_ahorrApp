@@ -9,7 +9,6 @@ class Command(BaseCommand):
     help = 'Genera sugerencias usando inteligencia artificial'
 
     def handle(self, *args, **options):
-        # Cuentas con transacciones recientes (últimos 30 días)
         accounts = Account.objects.filter(
             transaction__created_at__gte=timezone.now() - timezone.timedelta(days=30)
         ).distinct()

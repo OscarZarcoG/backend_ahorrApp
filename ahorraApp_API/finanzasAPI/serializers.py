@@ -9,17 +9,17 @@ class CashSerializer(serializers.ModelSerializer):
 class TypeTransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = TypeTransaction
-        fields = ['name', 'is_income']
+        fields = ['id', 'name', 'is_income']
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ['name', 'description', 'status']
+        fields = ['id', 'name', 'description', 'status']
 
 class AccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
-        fields = ['number_account', 'balance', 'fk_cash', 'fk_user', 'created_at', 'updated_at']
+        fields = ('id', 'number_account', 'balance', 'fk_cash', 'fk_user', 'created_at', 'updated_at')
 
 class TransactionSerializer(serializers.ModelSerializer):
     class Meta:

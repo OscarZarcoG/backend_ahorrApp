@@ -26,10 +26,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-g%=xnju0ik-)h)2cf-5bxaf##8(l3a9w3-a!1pv$67+3*nzp(c'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG', 'False') == 'True'
+#DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-#ALLOWED_HOSTS = ['localhost', '192.168.1.94', '192.168.1.74', '192.168.155.113', '192.168.1.5'] #'127.0.0.1',
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['localhost', '192.168.1.94', '192.168.1.74', '192.168.155.113', '192.168.22.113'] #'127.0.0.1',
+#ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -51,7 +51,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    #'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -62,7 +62,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'ahorraApp_API.urls'
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+#STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -85,28 +85,28 @@ WSGI_APPLICATION = 'ahorraApp_API.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-#DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.mysql',
-#        'NAME': 'ahorraApp_API',
-#        'USER': 'root',
-#        'PASSWORD': '',
-#        'HOST': 'localhost',
-#        'PORT': '3306',
-#    }
-#}
-
-#PRODUCTION
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('PGDATABASE'),
-        'USER': os.getenv('PGUSER'),
-        'PASSWORD': os.getenv('PGPASSWORD'),
-        'HOST': os.getenv('PGHOST'),
-        'PORT': os.getenv('PGPORT', '5432'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'ahorraApp_API',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': 'localhost',
+        'PORT': '3306',
     }
 }
+
+#PRODUCTION
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.postgresql',
+#        'NAME': os.getenv('PGDATABASE'),
+#        'USER': os.getenv('PGUSER'),
+#        'PASSWORD': os.getenv('PGPASSWORD'),
+#        'HOST': os.getenv('PGHOST'),
+#        'PORT': os.getenv('PGPORT', '5432'),
+#    }
+#}
 
 
 # Password validation
@@ -131,7 +131,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'es-mx'
 
 TIME_ZONE = 'America/Mexico_City'
 USE_TZ = True
@@ -144,7 +144,8 @@ USE_I18N = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+DEBUG = True
 
 # Default primary key field type
 # https://docs.djan¿ject.com/en/5.1/ref/settings/#default-auto-field
@@ -158,12 +159,12 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
     "http://192.168.1.74:3000", #Ethernet
     "http://192.168.1.94:3000", #Wifi
-    "http://192.168.155.113:3000", #Datos móviles
+    "http://192.168.22.113:3000", #Datos móviles
     "http://192.168.1.5:3000", #Casa
 
     # REACT NATIVE
     "http://localhost:19006",
-
+    "exp://192.168.22.113:8081",
     "http://192.168.1.94:19006", # Wifi
     "exp://192.168.1.94:8081",
 
@@ -208,4 +209,4 @@ REST_FRAMEWORK = {
 }
 
 ADMIN_SITE_HEADER = "AhorraApp Admin"  # Personaliza el título
-ADMIN_SITE_URL = "http://192.168.1.74:3000/dashboard/"
+ADMIN_SITE_URL = "http://192.168.22.113:3000/dashboard/"
